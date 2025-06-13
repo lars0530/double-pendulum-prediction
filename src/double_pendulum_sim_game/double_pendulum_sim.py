@@ -139,7 +139,13 @@ def run_double_pendulum_simulation() -> None:
     animate_func = create_animation_function(x1, y1, x2, y2, line, trace, time_text, dt)
 
     # Create and run animation
-    ani = animation.FuncAnimation(fig, animate_func, len(y), interval=dt * 1000, blit=True)  # noqa: F841
+    ani = animation.FuncAnimation(  # noqa: F841
+        fig=fig,
+        func=animate_func,
+        frames=len(y),
+        interval=dt * 1000,
+        blit=True,
+    )
     plt.show()
 
 
