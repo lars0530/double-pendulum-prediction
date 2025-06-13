@@ -17,31 +17,42 @@ L2 = 0.69  # length of pendulum 2 in m
 L = L1 + L2  # maximal length of the combined pendulum
 M1 = 1.0  # mass of pendulum 1 in kg
 M2 = 0.69  # mass of pendulum 2 in kg
+DAMPING_COEFFICIENT = 0.1  # damping coefficient for angular velocity
 
 
 def derivs(state: np.ndarray) -> np.ndarray:
-    """Calculate derivatives for double pendulum differential equation."""
+    """Calculate derivatives for double pendulum differential equation with damping."""
     dydx = np.zeros_like(state)
 
     dydx[0] = state[1]
 
     delta = state[2] - state[0]
     den1 = (M1 + M2) * L1 - M2 * L1 * cos(delta) * cos(delta)
+
+    # Add damping force proportional to angular velocity
+    damping_force_1 = -DAMPING_COEFFICIENT * state[1]
+
     dydx[1] = (
         M2 * L1 * state[1] * state[1] * sin(delta) * cos(delta)
         + M2 * G * sin(state[2]) * cos(delta)
         + M2 * L2 * state[3] * state[3] * sin(delta)
         - (M1 + M2) * G * sin(state[0])
+        + damping_force_1 * den1  # Apply damping
     ) / den1
 
     dydx[2] = state[3]
 
     den2 = (L2 / L1) * den1
+
+    # Add damping force for second pendulum
+    damping_force_2 = -DAMPING_COEFFICIENT * state[3]
+
     dydx[3] = (
         -M2 * L2 * state[3] * state[3] * sin(delta) * cos(delta)
         + (M1 + M2) * G * sin(state[0]) * cos(delta)
         - (M1 + M2) * L1 * state[1] * state[1] * sin(delta)
         - (M1 + M2) * G * sin(state[2])
+        + damping_force_2 * den2  # Apply damping
     ) / den2
 
     return dydx
