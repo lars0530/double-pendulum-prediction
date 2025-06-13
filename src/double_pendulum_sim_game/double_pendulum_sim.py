@@ -52,7 +52,10 @@ def simulate_pendulum(
     initial_velocities: tuple[float, float],
     t_stop: float = 50,
     dt: float = 0.01,
-) -> tuple[np.ndarray, np.ndarray]:
+) -> tuple[
+    np.ndarray[tuple[int], np.dtype[np.floating]],
+    np.ndarray[tuple[int, int], np.dtype[np.floating]],
+]:
     """Simulate double pendulum motion using Euler's method."""
     t = np.arange(0, t_stop, dt)
     th1, th2 = initial_angles
@@ -102,7 +105,7 @@ def create_animation_function(  # noqa: PLR0913
     trace: Line2D,
     time_text: Text,
     dt: float,
-) -> Callable:
+) -> Callable[[int], tuple[Line2D, Line2D, Text]]:
     """Create animation function for matplotlib FuncAnimation."""
 
     def animate(i: int) -> tuple[Line2D, Line2D, Text]:
