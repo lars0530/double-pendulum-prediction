@@ -11,3 +11,8 @@ dependencies = [
     "matplotlib>=3.10.3",
     "numpy>=2.3.0",
 ]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.29.5",
+]
