@@ -20,7 +20,9 @@ M2 = 0.69  # mass of pendulum 2 in kg
 DAMPING_COEFFICIENT = 0.1  # damping coefficient for angular velocity
 
 
-def derivs(state: np.ndarray) -> np.ndarray:
+def derivs(
+    state: np.ndarray[tuple[int], np.dtype[np.floating]],
+) -> np.ndarray[tuple[int], np.dtype[np.floating]]:
     """Calculate derivatives for double pendulum differential equation with damping."""
     dydx = np.zeros_like(state)
 
@@ -73,10 +75,10 @@ def simulate_pendulum(
     w1, w2 = initial_velocities
 
     # Convert to radians and create initial state
-    state = np.radians([th1, w1, th2, w2])
+    state: np.ndarray[tuple[int], np.dtype[np.floating]] = np.radians([th1, w1, th2, w2])
 
     # Integrate using Euler's method
-    y = np.empty((len(t), 4))
+    y: np.ndarray[tuple[int, int], np.dtype[np.floating]] = np.empty((len(t), 4))
     y[0] = state
     for i in range(1, len(t)):
         y[i] = y[i - 1] + derivs(y[i - 1]) * dt
